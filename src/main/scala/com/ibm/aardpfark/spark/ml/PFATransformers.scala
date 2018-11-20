@@ -5,8 +5,7 @@ import com.ibm.aardpfark.pfa.dsl.StringExpr
 import com.ibm.aardpfark.pfa.types.WithSchema
 import com.ibm.aardpfark.spark.ml.linear.{DenseLinearModelData, LinearModelData, SparkLinearModel, SparseLinearModelData}
 import org.apache.avro.{Schema, SchemaBuilder}
-
-import org.apache.spark.ml.classification.{ClassificationModel, LinearSVCModel, LogisticRegressionModel}
+import org.apache.spark.ml.classification.{ClassificationModel, LinearSVCModel, LogisticRegressionModel, OneVsRest}
 import org.apache.spark.ml.regression.{GeneralizedLinearRegressionModel, LinearRegressionModel}
 import org.apache.spark.ml.{PredictionModel, Transformer}
 
@@ -33,6 +32,8 @@ trait PFAModel[T <: WithSchema] extends PFATransformer with HasModelCell {
   protected def cell: Cell[T]
   override protected lazy val modelCell = NamedCell(sparkTransformer.uid, cell)
 }
+
+trait PFAModelSet extends PFATransformer with HasModelCells
 
 trait PFAPredictionModel[T <: WithSchema] extends PFAModel[T] {
 

@@ -53,6 +53,13 @@ class PFABuilder {
     this
   }
 
+  def withCells[T <: WithSchema](namedCells: Seq[NamedCell[T]]): this.type = {
+    for(namedCell <- namedCells){
+      cells += namedCell.name -> namedCell.cell
+    }
+    this
+  }
+
   def withFunction(name: String, fn: FunctionDef): this.type = {
     functions += name -> fn
     this

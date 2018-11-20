@@ -2,6 +2,7 @@ package com.ibm.aardpfark.pfa.document
 
 import com.ibm.aardpfark.pfa.dsl._
 import com.ibm.aardpfark.pfa.expression.PFAExpression
+import com.ibm.aardpfark.pfa.types.WithSchema
 import com.ibm.aardpfark.pfa.utils.Utils
 import org.apache.avro.Schema
 import org.json4s.native.Serialization
@@ -14,10 +15,16 @@ trait ToPFA {
 
 trait HasAction {
   protected def action: PFAExpression
+  def getAction: PFAExpression = action
 }
 
 trait HasModelCell {
   protected def modelCell: NamedCell[_]
+  def getModelCell: NamedCell[_] = modelCell
+}
+
+trait HasModelCells {
+  protected def modelCells: Seq[NamedCell[WithSchema]]
 }
 
 case class PFADocument(
