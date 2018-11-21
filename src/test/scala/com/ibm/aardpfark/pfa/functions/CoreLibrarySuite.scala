@@ -2,6 +2,7 @@ package com.ibm.aardpfark.pfa.functions
 
 import com.ibm.aardpfark.pfa.document.PFABuilder
 import com.ibm.aardpfark.pfa.dsl._
+import org.apache.avro.SchemaBuilder
 
 class CoreLibrarySuite extends FunctionLibrarySuite {
 
@@ -57,6 +58,19 @@ class CoreLibrarySuite extends FunctionLibrarySuite {
     assert(engine.action(engine.jsonInput("4.0")) == 2.0)
   }
 
+  test("Core divfloor") {
+    val action = core.divfloor(inputExpr, 3)
+
+    val pfaDoc = new PFABuilder()
+      .withInput[Int]
+      .withOutput[Int]
+      .withAction(action)
+      .pfa
+
+    val engine = getPFAEngine(pfaDoc.toJSON())
+    assert(engine.action(engine.jsonInput("10")) == 3)
+  }
+
   test("Core addinv") {
     val action = core.addinv(inputExpr)
 
@@ -68,6 +82,32 @@ class CoreLibrarySuite extends FunctionLibrarySuite {
 
     val engine = getPFAEngine(pfaDoc.toJSON())
     assert(engine.action(engine.jsonInput("-1.0")) == 1.0)
+  }
+
+  test("Core mod") {
+    val action = core.mod(inputExpr,3)
+
+    val pfaDoc = new PFABuilder()
+      .withInput[Int]
+      .withOutput[Int]
+      .withAction(action)
+      .pfa
+
+    val engine = getPFAEngine(pfaDoc.toJSON())
+    assert(engine.action(engine.jsonInput("-10")) == 2)
+  }
+
+  test("Core modmod") {
+    val action = core.modmod(inputExpr,3)
+
+    val pfaDoc = new PFABuilder()
+      .withInput[Int]
+      .withOutput[Int]
+      .withAction(action)
+      .pfa
+
+    val engine = getPFAEngine(pfaDoc.toJSON())
+    assert(engine.action(engine.jsonInput("-10")) == -1)
   }
 
   test("Core and") {
@@ -83,6 +123,65 @@ class CoreLibrarySuite extends FunctionLibrarySuite {
     assert(engine.action(engine.jsonInput("true")) == true)
   }
 
+  test("Core xor") {
+    val action = core.xor(inputExpr, inputExpr)
+
+    val pfaDoc = new PFABuilder()
+      .withInput[Boolean]
+      .withOutput[Boolean]
+      .withAction(action)
+      .pfa
+
+    val engine = getPFAEngine(pfaDoc.toJSON())
+    assert(engine.action(engine.jsonInput("true")) == false)
+  }
+
+  test("Core nullableAnd") {
+    val action = core.nullableAnd(inputExpr, inputExpr)
+
+    val nullBool = SchemaBuilder.nullable().booleanType()
+
+    val pfaDoc = new PFABuilder()
+      .withInput(nullBool) //TODO: Upgrade to Option[Boolean] with avro4s 2.0+
+      .withOutput(nullBool)
+      .withAction(action)
+      .pfa
+
+    val engine = getPFAEngine(pfaDoc.toJSON())
+    assert(engine.action(engine.jsonInput("null")) == null)
+  }
+
+  test("Core nullableOr") {
+    val action = core.nullableOr(inputExpr, inputExpr)
+
+    val nullBool = SchemaBuilder.nullable().booleanType()
+
+    val pfaDoc = new PFABuilder()
+      .withInput(nullBool)
+      .withOutput(nullBool)
+      .withAction(action)
+      .pfa
+
+    val engine = getPFAEngine(pfaDoc.toJSON())
+    assert(engine.action(engine.jsonInput("null")) == null)
+  }
+
+  test("Core nullableNot") {
+    val action = core.nullableNot(inputExpr)
+
+    val nullBool = SchemaBuilder.nullable().booleanType()
+
+    val pfaDoc = new PFABuilder()
+      .withInput(nullBool)
+      .withOutput(nullBool)
+      .withAction(action)
+      .pfa
+
+    val engine = getPFAEngine(pfaDoc.toJSON())
+    assert(engine.action(engine.jsonInput("null")) == null)
+  }
+
+
   test("Core eq") {
     val action = core.eq(inputExpr, 1.0)
 
@@ -94,6 +193,19 @@ class CoreLibrarySuite extends FunctionLibrarySuite {
 
     val engine = getPFAEngine(pfaDoc.toJSON())
     assert(engine.action(engine.jsonInput("1.0")) == true)
+  }
+
+  test("Core cmp") {
+    val action = core.cmp(inputExpr, 1.0)
+
+    val pfaDoc = new PFABuilder()
+      .withInput[Double]
+      .withOutput[Int]
+      .withAction(action)
+      .pfa
+
+    val engine = getPFAEngine(pfaDoc.toJSON())
+    assert(engine.action(engine.jsonInput("2.0")) == 1)
   }
 
   test("Core lt") {
@@ -159,6 +271,32 @@ class CoreLibrarySuite extends FunctionLibrarySuite {
 
     val engine = getPFAEngine(pfaDoc.toJSON())
     assert(engine.action(engine.jsonInput("2.0")) == true)
+  }
+
+  test("Core max") {
+    val action = core.max(inputExpr, 1.0)
+
+    val pfaDoc = new PFABuilder()
+      .withInput[Double]
+      .withOutput[Double]
+      .withAction(action)
+      .pfa
+
+    val engine = getPFAEngine(pfaDoc.toJSON())
+    assert(engine.action(engine.jsonInput("2.0")) == 2.0)
+  }
+
+  test("Core min") {
+    val action = core.min(inputExpr, 1.0)
+
+    val pfaDoc = new PFABuilder()
+      .withInput[Double]
+      .withOutput[Double]
+      .withAction(action)
+      .pfa
+
+    val engine = getPFAEngine(pfaDoc.toJSON())
+    assert(engine.action(engine.jsonInput("2.0")) == 1.0)
   }
 
   test("Core pow") {

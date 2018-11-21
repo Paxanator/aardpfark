@@ -1,0 +1,7 @@
+# Aardpfark Scripts
+
+
+This folder contains scripts that are useful for the aardpfark project.
+
+
+1. [**PFA DSL Generator**](pfa_dsl_generator.py): a script to generate the  `aardpfark.pfa.functions.FunctionLibrary`

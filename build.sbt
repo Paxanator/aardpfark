@@ -9,8 +9,8 @@ scalaVersion := "2.11.8"
 resolvers += Resolver.mavenLocal
 
 libraryDependencies ++= Seq(
-  "com.sksamuel.avro4s" %% "avro4s-core" % "1.7.0",
-  "com.sksamuel.avro4s" %% "avro4s-json" % "1.7.0",
+  "com.sksamuel.avro4s" %% "avro4s-core" % "1.9.0",
+  "com.sksamuel.avro4s" %% "avro4s-json" % "1.9.0",
   "org.apache.spark" %% "spark-mllib" % "2.2.0" % "provided",
   "org.apache.spark" %% "spark-sql" % "2.2.0" % "test",
   "org.apache.spark" %% "spark-hive" % "2.2.0" % "test",

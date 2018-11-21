@@ -1,7 +1,7 @@
 package com.ibm.aardpfark.pfa.expression
 
 import com.ibm.aardpfark.pfa.document.{PFAExpressionSerializer, ParamSerializer, SchemaSerializer}
-import org.json4s.native.JsonMethods.parse
+import org.json4s.native.JsonMethods.{parse => parseJSON}
 import org.json4s.native.Serialization
 import org.json4s.native.Serialization.write
 import org.json4s.{JDouble, JField, JInt, JObject, JString, JValue, NoTypeHints}
@@ -26,7 +26,7 @@ class FunctionCall(name: String, args: Any*) extends PFAExpression {
           new SchemaSerializer +
           new PFAExpressionSerializer +
           new ParamSerializer
-        parse(write(fnDef))
+        parseJSON(write(fnDef))
     }
     JObject(JField(name, jArgs) :: Nil)
   }
